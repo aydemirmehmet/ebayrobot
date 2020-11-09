@@ -17,6 +17,7 @@ python-dateutil==2.8.1
 python-git==2018.2.1
 python-slugify==4.0.1
 
-
+scrapyd==1.2.1
+scrapyd-client==1.2.0a1
 
 Scrapy==2.2.0
