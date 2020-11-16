@@ -5,8 +5,8 @@ from twisted.internet.task import deferLater
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
 from ..items import EbayrobotItem
-
-
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.twisted import TwistedScheduler
 
 class  Automobilespirder(scrapy.Spider):
     name="ebay"
@@ -33,5 +33,16 @@ class  Automobilespirder(scrapy.Spider):
                 item["siteId"]=1
                 yield item 
 
+process = CrawlerProcess(get_project_settings())
+sched = TwistedScheduler()
+sched.add_job(process.crawl, 'interval', args=[Automobilespirder], seconds=10)
+sched.start()
+process.start(False) 
+
+
+
+
+
+     
 
 
