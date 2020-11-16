@@ -33,25 +33,5 @@ class  Automobilespirder(scrapy.Spider):
                 item["siteId"]=1
                 yield item 
 
-     
-def sleep(self, *args, seconds):
-    """Non blocking sleep callback"""
-    return deferLater(reactor, seconds, lambda: None)
-
-
-process = CrawlerProcess(get_project_settings())
-
-
-def _crawl(result, spider):
-    deferred = process.crawl(spider)
-    deferred.addCallback(lambda results: print('waiting 30 seconds before restart...'))
-    deferred.addCallback(sleep, seconds=6)
-    deferred.addCallback(_crawl, spider)
-    return deferred
-
-
-_crawl(None, Automobilespirder)
-process.start()       
-     
 
 
