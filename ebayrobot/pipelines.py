@@ -44,11 +44,8 @@ class EbayrobotPipeline:
         self.client.close()
 
     def process_item(self, item, spider):
-     
-        ## how to handle each post
-        if (item["autoid"] != "") :
-            count = self.db[self.mongo_db].count({"autoid": item["autoid"]}) 
-            if (count == 0):
-              self.db['EbayTableTest'].insert(dict(item))
-              
-              return item
+        exists = self.db['EbayTable'].find_one({"autoid": dict(item)["autoid"]})
+        if not exists:
+            self.db['EbayTable'].insert_one(dict(item))
+        return item
+        
