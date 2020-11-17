@@ -32,12 +32,12 @@ class  Automobilespirder(scrapy.Spider):
                 item["durum"]="1"
                 item["siteId"]=1
                 yield item 
-
-process = CrawlerProcess(get_project_settings())
-sched = TwistedScheduler()
-sched.add_job(process.crawl, 'interval', args=[Automobilespirder], seconds=10)
-sched.start()
-process.start(False) 
+if __name__ == '__main__':
+        process = CrawlerProcess(get_project_settings())
+        sched = TwistedScheduler()
+        sched.add_job(process.crawl, 'interval', args=[Automobilespirder], seconds=10)
+        sched.start()
+        process.start(False) 
 
 
 
