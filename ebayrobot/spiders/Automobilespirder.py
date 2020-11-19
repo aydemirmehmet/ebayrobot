@@ -16,7 +16,7 @@ class  Automobilespirder(scrapy.Spider):
    
     def parse(self,response):
       
-            for sel in  response.xpath('//ul[@id="srchrslt-adtable"]/li[ not(contains(.,"is-topad") )]'):
+            for sel in  reversed(response.xpath('//ul[@id="srchrslt-adtable"]/li[ not(contains(.,"is-topad") )]')):
             
                 item=EbayrobotItem()
                 item["resim"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[@class="aditem-image"]/div[@class="imagebox srpimagebox"]/@data-imgsrc').extract())
@@ -31,6 +31,7 @@ class  Automobilespirder(scrapy.Spider):
                 item["telefon"]="-"
                 item["durum"]="1"
                 item["siteId"]=1
+                #item["autoid"]=int(item["autoid"])
                 yield item 
 
 
@@ -45,13 +46,14 @@ process = CrawlerProcess(get_project_settings())
 def _crawl(result, spider):
     deferred = process.crawl(spider)
     deferred.addCallback(lambda results: print('waiting 30 seconds before restart...'))
-    deferred.addCallback(sleep, seconds=7)
+    deferred.addCallback(sleep, seconds=6)
     deferred.addCallback(_crawl, spider)
     return deferred
 
 
 _crawl(None, Automobilespirder)
-process.start()      
+process.start()         
+
 
 
 
