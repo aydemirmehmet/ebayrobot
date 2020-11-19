@@ -21,7 +21,7 @@ class  Automobilespirder(scrapy.Spider):
                 item=EbayrobotItem()
                 item["resim"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[@class="aditem-image"]/div[@class="imagebox srpimagebox"]/@data-imgsrc').extract())
                 item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@href').extract())
-                item["autoid"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@name').extract())
+                item["autoid"]=''.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@name').extract())
                 item["fiyat"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[3]/strong/text()').extract())
                 item["km"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[1]/text()').extract())
                 item["marka"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a/text()').extract())
@@ -31,7 +31,10 @@ class  Automobilespirder(scrapy.Spider):
                 item["telefon"]="-"
                 item["durum"]="1"
                 item["siteId"]=1
-                #item["autoid"]=int(item["autoid"])
+                if item["autoid"]!="":
+                    item["autoid"]=int(item["autoid"])
+                else:
+                     item["autoid"]=1
                 yield item 
 
 
@@ -45,8 +48,8 @@ process = CrawlerProcess(get_project_settings())
 
 def _crawl(result, spider):
     deferred = process.crawl(spider)
-    deferred.addCallback(lambda results: print('waiting 12 seconds before restart...'))
-    deferred.addCallback(sleep, seconds=12)
+    deferred.addCallback(lambda results: print('waiting 30 seconds before restart...'))
+    deferred.addCallback(sleep, seconds=10)
     deferred.addCallback(_crawl, spider)
     return deferred
 
