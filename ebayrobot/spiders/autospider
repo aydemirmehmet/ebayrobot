@@ -9,7 +9,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.twisted import TwistedScheduler
 
 class  autospider(scrapy.Spider):
-    name="ebay"
+    name="ebay1"
     allowed_domains = ["ebay-kleinanzeigen.de"]
     start_urls=['https://www.ebay-kleinanzeigen.de/s-autos/anbieter:privat/preis::3500/c216']
 
