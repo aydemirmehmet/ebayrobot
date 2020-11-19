@@ -31,10 +31,7 @@ class  Automobilespirder(scrapy.Spider):
                 item["telefon"]="-"
                 item["durum"]="1"
                 item["siteId"]=1
-                if item["autoid"]!="":
-                    item["autoid"]=int(item["autoid"])
-                else:
-                     item["autoid"]=1
+                
                 yield item 
 
 
