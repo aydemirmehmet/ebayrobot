@@ -7,7 +7,7 @@ from scrapy.utils.project import get_project_settings
 from ..items import EbayrobotItem
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.schedulers.twisted import TwistedScheduler
-
+import decimal
 class  Automobilespirder(scrapy.Spider):
     name="ebay"
     allowed_domains = ["ebay-kleinanzeigen.de"]
@@ -31,7 +31,11 @@ class  Automobilespirder(scrapy.Spider):
                 item["telefon"]="-"
                 item["durum"]="1"
                 item["siteId"]=1
-                
+                if item["autoid"]!="":
+                    item["autoid"]= float( item["autoid"])
+                else:
+                    item["autoid"]=float("0")
+                    
                 yield item 
 
 
@@ -45,8 +49,8 @@ process = CrawlerProcess(get_project_settings())
 
 def _crawl(result, spider):
     deferred = process.crawl(spider)
-    deferred.addCallback(lambda results: print('waiting 30 seconds before restart...'))
-    deferred.addCallback(sleep, seconds=10)
+    deferred.addCallback(lambda results: print('waiting 5 seconds before restart...'))
+    deferred.addCallback(sleep, seconds=5)
     deferred.addCallback(_crawl, spider)
     return deferred
 
