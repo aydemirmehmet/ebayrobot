@@ -16,7 +16,7 @@ class  Automobilespirder(scrapy.Spider):
    
     def parse(self,response):
       
-            for sel in  reversed(response.xpath('//ul[@id="srchrslt-adtable"]/li[ not(contains(.,"is-topad") )]')):
+            for sel in  response.css(".ad-listitem.lazyload-item"):
             
                 item=EbayrobotItem()
                 item["resim"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[@class="aditem-image"]/div[@class="imagebox srpimagebox"]/@data-imgsrc').extract())
