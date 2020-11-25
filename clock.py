@@ -7,6 +7,6 @@ from ebayrobot.spiders.Automobilespirder import Automobilespirder
 
 process = CrawlerProcess(get_project_settings())
 sched = TwistedScheduler()
-sched.add_job(process.crawl, 'interval', args=[Automobilespirder], seconds=10)
+sched.add_job(process.crawl, 'interval', args=[Automobilespirder], seconds=5)
 sched.start()
 process.start(False)
