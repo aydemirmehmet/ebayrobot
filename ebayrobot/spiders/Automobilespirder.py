@@ -15,28 +15,37 @@ class  Automobilespirder(scrapy.Spider):
 
    
     def parse(self,response):
-      
-            for sel in  response.css(".ad-listitem.lazyload-item"):
+      #is-highlight
+               for sel in  response.css(".ad-listitem.lazyload-item"):
             
-                item=EbayrobotItem()
-                item["resim"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[@class="aditem-image"]/div[@class="imagebox srpimagebox"]/@data-imgsrc').extract())
-                item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@href').extract())
-                item["autoid"]=''.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@name').extract())
-                item["fiyat"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[3]/strong/text()').extract())
-                item["km"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[1]/text()').extract())
-                item["marka"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a/text()').extract())
-                item["modelyil"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[2]/text()').extract())
-                trans_table = {ord(c): None for c in u'\r\n\t'}
-                item["sehir"]=' '.join(s.strip().translate(trans_table) for s in sel.xpath('./article/div[3]/text()').extract())
-                item["telefon"]="-"
-                item["durum"]="1"
-                item["siteId"]=1
-                if item["autoid"]!="":
-                    item["autoid"]= float( item["autoid"])
-                else:
-                    item["autoid"]=float("0")
+                   item=EbayrobotItem()
+                   try:
+                      
+                       item["resim"]=""
+                       item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(sel.css(".ellipsis::attr(href)").extract())
+                        #item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@href').extract())
+                       #item["autoid"]=sel.css(".ellipsis::attr(name)").extract()
+                
+                       item["autoid"]=''.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@name').extract())
+                       item["fiyat"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[3]/strong/text()').extract())
+                       item["km"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[1]/text()').extract())
+                       item["marka"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a/text()').extract())
+                       item["modelyil"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[2]/text()').extract())
+                       trans_table = {ord(c): None for c in u'\r\n\t'}
+                       item["sehir"]=' '.join(s.strip().translate(trans_table) for s in sel.xpath('./article/div[3]/text()').extract())
+                       item["telefon"]="-"
+                       item["durum"]="1"
+                       item["siteId"]=1
+                       if item["autoid"]!="":
+                            item["autoid"]= float( item["autoid"])
+                       else:
+                            item["autoid"]=float("0")
+                      
+                   except IndexError:
+                       item["autoid"]=float("0")
+                        
                     
-                yield item 
+                   yield item 
 
 
 def sleep(self, *args, seconds):
