@@ -1,4 +1,4 @@
-
+scrapy-crawlera==1.7.2
 cssselect==0.9.1
 
 dnspython==2.0.0
