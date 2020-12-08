@@ -10,7 +10,7 @@
 from ebayrobot.utils import get_random_agent
 import random, requests
 
-USER_AGENT = get_random_agent()
+
 BOT_NAME = 'ebayrobot'
 
 SPIDER_MODULES = ['ebayrobot.spiders']
@@ -33,7 +33,7 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 1
 CONCURRENT_REQUESTS_PER_IP = 1
 CONCURRENT_REQUESTS = 1
 # Disable cookies (enabled by default)
-COOKIES_ENABLED = False
+
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
 
@@ -102,3 +102,43 @@ MONGO_DATABASE = 'EbayDb'
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+# Configure item pipelines
+# See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
+#ITEM_PIPELINES = {
+#    'ebayrobot.pipelines.EbayrobotPipeline': 300,
+#}
+
+# Enable and configure the AutoThrottle extension (disabled by default)
+# See https://docs.scrapy.org/en/latest/topics/autothrottle.html
+#AUTOTHROTTLE_ENABLED = True
+# The initial download delay
+#AUTOTHROTTLE_START_DELAY = 5
+# The maximum download delay to be set in case of high latencies
+#AUTOTHROTTLE_MAX_DELAY = 60
+# The average number of requests Scrapy should be sending in parallel to
+# each remote server
+#AUTOTHROTTLE_TARGET_CONCURRENCY = 1.0
+# Enable showing throttling stats for every response received:
+#AUTOTHROTTLE_DEBUG = False
+
+# Enable and configure HTTP caching (disabled by default)
+# See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
+#HTTPCACHE_ENABLED = False
+#HTTPCACHE_EXPIRATION_SECS = 0
+#HTTPCACHE_DIR = 'httpcache'
+#HTTPCACHE_IGNORE_HTTP_CODES = []
+#HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+AUTOTHROTTLE_ENABLED = False
+
+DOWNLOAD_TIMEOUT = 5
+CONCURRENT_REQUESTS_PER_DOMAIN = 1
+CONCURRENT_REQUESTS_PER_IP = 1
+CONCURRENT_REQUESTS = 1
+# enable the middleware
+DOWNLOADER_MIDDLEWARES = {'scrapy_crawlera.CrawleraMiddleware': 610}
+
+# enable crawlera
+CRAWLERA_ENABLED = True
+
+# the APIkey you get with your subscription
+CRAWLERA_APIKEY = '71514b8299c2405d88468ac2b65c86c0'
