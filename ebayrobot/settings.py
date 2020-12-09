@@ -20,18 +20,13 @@ NEWSPIDER_MODULE = 'ebayrobot.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'ebayrobot (+http://www.yourdomain.com)'
 
-DEPTH_LIMIT = 0
-DEPTH_PRIORITY = 0 
+
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = False
 ITEM_PIPELINES = {
     'ebayrobot.pipelines.EbayrobotPipeline':300,
      }
-DOWNLOAD_DELAY = 5
-# The download delay setting will honor only one of:
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
-CONCURRENT_REQUESTS_PER_IP = 1
-CONCURRENT_REQUESTS = 1
+
 # Disable cookies (enabled by default)
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
@@ -131,9 +126,9 @@ MONGO_DATABASE = 'EbayDb'
 AUTOTHROTTLE_ENABLED = False
 
 DOWNLOAD_TIMEOUT = 5
-CONCURRENT_REQUESTS_PER_DOMAIN = 1
-CONCURRENT_REQUESTS_PER_IP = 1
-CONCURRENT_REQUESTS = 1
+CONCURRENT_REQUESTS_PER_DOMAIN = 32 
+CONCURRENT_REQUESTS_PER_IP = 32 
+CONCURRENT_REQUESTS = 32 
 # enable the middleware
 DOWNLOADER_MIDDLEWARES = {'scrapy_crawlera.CrawleraMiddleware': 610}
 
