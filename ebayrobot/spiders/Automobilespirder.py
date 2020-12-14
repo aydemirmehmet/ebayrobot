@@ -1,75 +1,49 @@
 import scrapy
-from w3lib.html import replace_escape_chars
-from twisted.internet import reactor
-from twisted.internet.task import deferLater
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.project import get_project_settings
-from ..items import EbayrobotItem
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.schedulers.twisted import TwistedScheduler
-import decimal
+import scrapy.spiders
+from  ..items import EbayrobotItem
+
+
+
+
+
 class  Automobilespirder(scrapy.Spider):
     name="ebay"
     allowed_domains = ["ebay-kleinanzeigen.de"]
     start_urls=['https://www.ebay-kleinanzeigen.de/s-autos/anbieter:privat/preis::3500/c216']
 
    
+
+   
     def parse(self,response):
       #is-highlight
-               for sel in  response.css(".ad-listitem.lazyload-item"):
+               for sel in  reversed(response.xpath('//ul[@id="srchrslt-adtable"]/li[ not(contains(@class,"is-highlight") ) and not(contains(@class,"is-topad"))]/article')):
             
                    item=EbayrobotItem()
                    try:
-                      
                        item["resim"]=""
                        item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(sel.css(".ellipsis::attr(href)").extract())
-                        #item["link"]="https://www.ebay-kleinanzeigen.de"+' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@href').extract())
-                       #item["autoid"]=sel.css(".ellipsis::attr(name)").extract()
-                
-                       item["autoid"]=''.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a[@class="ellipsis"]/@name').extract())
-                       item["fiyat"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[3]/strong/text()').extract())
-                       item["km"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[1]/text()').extract())
-                       item["marka"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/h2/a/text()').extract())
-                       item["modelyil"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./article/div[2]/p[2]/span[2]/text()').extract())
+                       item["autoid"]=' '.join(sel.css(".ellipsis::attr(name)").extract())
+                       item["fiyat"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./div[3]/strong/text()').extract())
+                       item["km"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./div[2]/p[2]/span[1]/text()').extract())
+                       item["marka"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./div[2]/h2/a/text()').extract())
+                       item["modelyil"]=' '.join(a.strip().replace("'","") for a in sel.xpath('./div[2]/p[2]/span[2]/text()').extract())
                        trans_table = {ord(c): None for c in u'\r\n\t'}
-                       item["sehir"]=' '.join(s.strip().translate(trans_table) for s in sel.xpath('./article/div[3]/text()').extract())
+                       item["sehir"]=' '.join(s.strip().translate(trans_table) for s in sel.xpath('./div[3]/text()').extract()) + ' '.join(s.strip().translate(trans_table) for s in sel.xpath('./div[4]/text()').extract())
                        item["telefon"]="-"
-                       item["durum"]="1"
+                       autoid=item["link"].split("/")[5].split("-")[0]
+                       item["durum"]= item["link"].split("/")[5].split("-")[0]
                        item["siteId"]=1
                        if item["autoid"]!="":
                             item["autoid"]= float( item["autoid"])
                        else:
-                            item["autoid"]=float("0")
+                            item["autoid"]=float(autoid)
                       
                    except IndexError:
                        item["autoid"]=float("0")
                         
                     
                    yield item 
-
-
-def sleep(self, *args, seconds):
-    """Non blocking sleep callback"""
-    return deferLater(reactor, seconds, lambda: None)
-
-
-process = CrawlerProcess(get_project_settings())
-
-
-def _crawl(result, spider):
-    deferred = process.crawl(spider)
-    deferred.addCallback(lambda results: print('waiting 1 seconds before restart...'))
-    deferred.addCallback(sleep, seconds=1)
-    deferred.addCallback(_crawl, spider)
-    return deferred
-
-
-_crawl(None, Automobilespirder)
-process.start()         
-
-
-
-
-     
-
+                   yield scrapy.Request(response.url, meta={'dont_merge_cookies': True}, callback=self.parse, dont_filter=True)
 
