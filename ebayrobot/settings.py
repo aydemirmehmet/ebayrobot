@@ -51,7 +51,7 @@ ITEM_PIPELINES = {
 #   'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
 #   'Accept-Language': 'en',
 #}
-MONGO_URI = 'mongodb+srv://EbayUser:08618601aS*@cluster0.me05t.mongodb.net/EbayDb?retryWrites=true&w=majority'
+MONGO_URI = ''
 MONGO_DATABASE = 'EbayDb'
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
